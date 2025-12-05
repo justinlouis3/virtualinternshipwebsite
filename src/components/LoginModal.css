@@ -1,0 +1,143 @@
+.modal__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal__content {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 8px;
+  max-width: 450px;
+  width: 90%;
+  position: relative;
+  animation: slideUp 0.3s ease;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 32px;
+  color: #032b41;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.modal__close:hover {
+  color: #2bd97c;
+}
+
+.modal__title {
+  font-size: 28px;
+  color: #032b41;
+  margin-bottom: 32px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.login__form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form__group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form__group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #032b41;
+}
+
+.form__group input {
+  padding: 12px 16px;
+  border: 1px solid #bac8ce;
+  border-radius: 4px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form__group input:focus {
+  border-color: #2bd97c;
+}
+
+.modal__btn {
+  margin-top: 8px;
+  height: 48px;
+  font-weight: 500;
+}
+
+.modal__divider {
+  display: flex;
+  align-items: center;
+  margin: 24px 0;
+  color: #6b757b;
+}
+
+.modal__divider::before,
+.modal__divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: #bac8ce;
+}
+
+.modal__divider span {
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.guest__btn {
+  background-color: #032b41;
+  color: #fff;
+  height: 48px;
+  font-weight: 500;
+}
+
+.guest__btn:hover {
+  background-color: #0a3f5c;
+}

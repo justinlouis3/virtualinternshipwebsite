@@ -1,0 +1,17 @@
+import React from 'react';
+import './Skeleton.css';
+
+function Skeleton({ width, height, borderRadius = '4px', className = '' }) {
+  return (
+    <div 
+      className={`skeleton ${className}`}
+      style={{ 
+        width: width || '100%', 
+        height: height || '20px',
+        borderRadius: borderRadius
+      }}
+    />
+  );
+}
+
+export default Skeleton;
