@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import Navbar from './components/Navbar';
 import Landing from './components/Landing';
@@ -12,7 +12,6 @@ import ForYouPage from './components/ForYouPage';
 import BookPage from './components/BookPage';
 import ChoosePlanPage from './components/ChoosePlanPage';
 import SettingsPage from './components/SettingsPage';
-import SearchBar from './components/SearchBar';
 import HelpSupportPage from './components/HelpSupportPage';
 import SearchPage from './components/SearchPage';
 import PlayerPage from './components/PlayerPage';
@@ -30,7 +29,7 @@ function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Load user data from localStorage on mount
-  useState(() => {
+  useEffect(() => {
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
       const userData = JSON.parse(storedUser);
@@ -59,7 +58,10 @@ function App() {
       }
       // Save to localStorage for this user
       if (userEmail) {
-        localStorage.setItem(`savedBooks_${userEmail}`, JSON.stringify(newBooks));
+        const storageKey = `savedBooks_${userEmail}`;
+        localStorage.setItem(storageKey, JSON.stringify(newBooks));
+        console.log(`Saved books for ${userEmail}:`, newBooks.length, 'books');
+        console.log(`Storage key: ${storageKey}`);
       }
       return newBooks;
     });
@@ -89,6 +91,8 @@ function App() {
   };
 
   const handleLogin = (email, name, subscription = 'free') => {
+    console.log(`Logging in user: ${email}`);
+    
     setIsLoggedIn(true);
     setUserName(name);
     setUserEmail(email);
@@ -99,10 +103,16 @@ function App() {
     localStorage.setItem('currentUser', JSON.stringify(userData));
     
     // Load user's saved books
-    const userBooks = localStorage.getItem(`savedBooks_${email}`);
+    const storageKey = `savedBooks_${email}`;
+    const userBooks = localStorage.getItem(storageKey);
+    console.log(`Loading books for ${email} from key: ${storageKey}`);
+    
     if (userBooks) {
-      setSavedBooks(JSON.parse(userBooks));
+      const parsedBooks = JSON.parse(userBooks);
+      console.log(`Found ${parsedBooks.length} saved books for this user`);
+      setSavedBooks(parsedBooks);
     } else {
+      console.log('No saved books found for this user');
       setSavedBooks([]);
     }
     
