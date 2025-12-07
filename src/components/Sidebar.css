@@ -22,6 +22,9 @@ body.dark-mode .sidebar {
   padding: 24px 20px;
   border-bottom: 1px solid #e1e7ea;
   transition: border-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 body.dark-mode .sidebar__logo {
@@ -30,9 +33,11 @@ body.dark-mode .sidebar__logo {
 
 .sidebar__logo img {
   width: 140px;
+  max-width: 100%;
   height: auto;
   cursor: pointer;
-  filter: brightness(1);
+  display: block;
+  object-fit: contain;
   transition: filter 0.3s ease;
 }
 
