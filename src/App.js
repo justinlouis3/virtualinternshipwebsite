@@ -22,24 +22,58 @@ function App() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+  const [subscriptionPlan, setSubscriptionPlan] = useState('free'); // 'free' or 'premium'
   const [currentPage, setCurrentPage] = useState('home');
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [savedBooks, setSavedBooks] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  // Load user data from localStorage on mount
+  useState(() => {
+    const storedUser = localStorage.getItem('currentUser');
+    if (storedUser) {
+      const userData = JSON.parse(storedUser);
+      setIsLoggedIn(true);
+      setUserName(userData.name);
+      setUserEmail(userData.email);
+      setSubscriptionPlan(userData.subscription || 'free');
+      
+      // Load user's saved books
+      const userBooks = localStorage.getItem(`savedBooks_${userData.email}`);
+      if (userBooks) {
+        setSavedBooks(JSON.parse(userBooks));
+      }
+      setCurrentPage('for-you');
+    }
+  }, []);
+
   const handleSaveBook = (book) => {
     setSavedBooks(prev => {
       const isAlreadySaved = prev.some(b => b.id === book.id);
+      let newBooks;
       if (isAlreadySaved) {
-        return prev.filter(b => b.id !== book.id);
+        newBooks = prev.filter(b => b.id !== book.id);
       } else {
-        return [...prev, book];
+        newBooks = [...prev, book];
       }
+      // Save to localStorage for this user
+      if (userEmail) {
+        localStorage.setItem(`savedBooks_${userEmail}`, JSON.stringify(newBooks));
+      }
+      return newBooks;
     });
   };
 
   const handleRemoveBook = (bookId) => {
-    setSavedBooks(prev => prev.filter(b => b.id !== bookId));
+    setSavedBooks(prev => {
+      const newBooks = prev.filter(b => b.id !== bookId);
+      // Save to localStorage for this user
+      if (userEmail) {
+        localStorage.setItem(`savedBooks_${userEmail}`, JSON.stringify(newBooks));
+      }
+      return newBooks;
+    });
   };
 
   const isBookSaved = (bookId) => {
@@ -54,9 +88,24 @@ function App() {
     document.body.classList.toggle('dark-mode');
   };
 
-  const handleLogin = (name) => {
+  const handleLogin = (email, name, subscription = 'free') => {
     setIsLoggedIn(true);
     setUserName(name);
+    setUserEmail(email);
+    setSubscriptionPlan(subscription);
+    
+    // Store user data in localStorage
+    const userData = { email, name, subscription };
+    localStorage.setItem('currentUser', JSON.stringify(userData));
+    
+    // Load user's saved books
+    const userBooks = localStorage.getItem(`savedBooks_${email}`);
+    if (userBooks) {
+      setSavedBooks(JSON.parse(userBooks));
+    } else {
+      setSavedBooks([]);
+    }
+    
     setCurrentPage('for-you');
     closeLoginModal();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -65,6 +114,10 @@ function App() {
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUserName('');
+    setUserEmail('');
+    setSubscriptionPlan('free');
+    setSavedBooks([]);
+    localStorage.removeItem('currentUser');
     setCurrentPage('home');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -122,6 +175,27 @@ function App() {
     setIsSidebarOpen(false);
   };
 
+  const handleUpgradeToPremium = () => {
+    setSubscriptionPlan('premium');
+    
+    // Update user data in localStorage
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser) {
+      currentUser.subscription = 'premium';
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      
+      // Also update in registered users
+      const users = JSON.parse(localStorage.getItem('registeredUsers') || '{}');
+      if (users[currentUser.email]) {
+        users[currentUser.email].subscription = 'premium';
+        localStorage.setItem('registeredUsers', JSON.stringify(users));
+      }
+    }
+    
+    // Navigate back to settings or for-you page
+    navigateToForYou();
+  };
+
   return (
     <div className="App">
       {isLoggedIn && (
@@ -169,9 +243,14 @@ function App() {
         ) : currentPage === 'for-you' ? (
           <ForYouPage onBookClick={navigateToBook} onPlayClick={navigateToPlayer} />
         ) : currentPage === 'choose-plan' ? (
-          <ChoosePlanPage />
+          <ChoosePlanPage onUpgrade={handleUpgradeToPremium} />
         ) : currentPage === 'settings' ? (
-          <SettingsPage userName={userName} userEmail={userName ? `${userName.toLowerCase()}@example.com` : ''} />
+          <SettingsPage 
+            userName={userName} 
+            userEmail={userEmail} 
+            subscriptionPlan={subscriptionPlan}
+            onUpgradeClick={navigateToChoosePlan}
+          />
         ) : currentPage === 'library' ? (
           <LibraryPage savedBooks={savedBooks} onBookClick={navigateToBook} onRemoveBook={handleRemoveBook} />
         ) : currentPage === 'help' ? (

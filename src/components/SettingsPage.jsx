@@ -4,11 +4,8 @@ import { BsShieldCheck } from 'react-icons/bs';
 import Skeleton from './Skeleton';
 import './SettingsPage.css';
 
-function SettingsPage({ userEmail, userName }) {
+function SettingsPage({ userEmail, userName, subscriptionPlan, onUpgradeClick }) {
   const [loading, setLoading] = useState(true);
-  const [subscriptionStatus] = useState({
-    plan: 'Premium Plus'
-  });
 
   useEffect(() => {
     // Simulate loading settings data
@@ -16,6 +13,10 @@ function SettingsPage({ userEmail, userName }) {
       setLoading(false);
     }, 1000);
   }, []);
+
+  const getPlanDisplayName = () => {
+    return subscriptionPlan === 'premium' ? 'Premium Plus' : 'Free';
+  };
 
   if (loading) {
     return (
@@ -77,7 +78,26 @@ function SettingsPage({ userEmail, userName }) {
           </h2>
           <div className="settings-card">
             <div className="settings-item">
-              <div className="settings-item__value">{subscriptionStatus.plan}</div>
+              <div className="settings-item__value">{getPlanDisplayName()}</div>
+              {subscriptionPlan === 'free' && (
+                <button 
+                  className="btn settings-upgrade-btn" 
+                  onClick={onUpgradeClick}
+                  style={{ 
+                    marginTop: '16px', 
+                    backgroundColor: '#2bd97c',
+                    color: '#fff',
+                    padding: '12px 24px',
+                    borderRadius: '4px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontWeight: '500',
+                    fontSize: '16px'
+                  }}
+                >
+                  Upgrade to Premium
+                </button>
+              )}
             </div>
           </div>
         </section>

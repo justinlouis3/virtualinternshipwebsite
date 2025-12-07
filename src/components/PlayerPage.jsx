@@ -174,6 +174,20 @@ function PlayerPage({ bookId }) {
     );
   }
 
+  if (!book.audioLink) {
+    return (
+      <div className="player-page">
+        <div className="player-page__container">
+          <h1 className="player-page__title">{book.title}</h1>
+          <p className="player-page__author">By {book.author}</p>
+          <div className="error-message" style={{ marginTop: '32px' }}>
+            Audio version not available for this book.
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="player-page">
       <div className="player-page__container">
@@ -198,6 +212,10 @@ function PlayerPage({ bookId }) {
             ref={audioRef}
             src={book.audioLink}
             preload="metadata"
+            onError={(e) => {
+              console.error('Audio failed to load:', e);
+              setError('Failed to load audio. Please try again later.');
+            }}
           />
 
           <div className="audio-player__progress">

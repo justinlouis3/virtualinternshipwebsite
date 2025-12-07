@@ -3,7 +3,7 @@ import { AiOutlineCheck } from 'react-icons/ai';
 import Skeleton from './Skeleton';
 import './ChoosePlanPage.css';
 
-function ChoosePlanPage() {
+function ChoosePlanPage({ onUpgrade }) {
   const [selectedPlan, setSelectedPlan] = useState('yearly');
   const [loading, setLoading] = useState(true);
 
@@ -15,7 +15,14 @@ function ChoosePlanPage() {
   }, []);
 
   const handleSubscribe = (plan) => {
-    alert(`Subscribing to ${plan} plan!\n\nIn a production app, this would redirect to payment processing.`);
+    // In a real app, this would integrate with Stripe or payment processor
+    // For now, we'll just upgrade the user to premium
+    if (onUpgrade) {
+      onUpgrade();
+      alert(`Successfully upgraded to ${plan}!\n\nYou now have unlimited access to all premium features.`);
+    } else {
+      alert(`Subscribing to ${plan} plan!\n\nIn a production app, this would redirect to payment processing.`);
+    }
   };
 
   if (loading) {
