@@ -133,16 +133,28 @@ function ForYouPage({ onBookClick, onPlayClick }) {
                 <div className="selected-book__stats">
                   <div className="book-stat">
                     <div className="book-stat__icon">⏱️</div>
-                    <div className="book-stat__text">{Math.floor(selectedBook.averageRating * 3)} min read</div>
+                    <div className="book-stat__text">{selectedBook.totalRating || selectedBook.averageRating || '3-minute'} read</div>
                   </div>
                   <div className="book-stat">
                     <div className="book-stat__icon">⭐</div>
-                    <div className="book-stat__text">{selectedBook.averageRating}</div>
+                    <div className="book-stat__text">{selectedBook.averageRating ? selectedBook.averageRating.toFixed(1) : 'N/A'}</div>
                   </div>
                 </div>
                 <div className="selected-book__actions">
                   <button className="btn selected-book__btn" onClick={() => onBookClick(selectedBook.id)}>Read Now</button>
-                  <button className="btn selected-book__btn selected-book__btn--listen" onClick={() => onPlayClick(selectedBook.id)}>Listen</button>
+                  <button 
+                    className="btn selected-book__btn selected-book__btn--listen" 
+                    onClick={() => {
+                      console.log('Listen button clicked for book ID:', selectedBook.id);
+                      if (onPlayClick) {
+                        onPlayClick(selectedBook.id);
+                      } else {
+                        console.error('onPlayClick is not defined');
+                      }
+                    }}
+                  >
+                    Listen
+                  </button>
                 </div>
               </div>
               <div className="selected-book__image" onClick={() => onBookClick(selectedBook.id)} style={{ cursor: 'pointer' }}>
@@ -165,8 +177,8 @@ function ForYouPage({ onBookClick, onPlayClick }) {
                   <h4 className="book-card__title">{book.title}</h4>
                   <p className="book-card__author">{book.author}</p>
                   <div className="book-card__footer">
-                    <span className="book-card__time">⏱️ {Math.floor(book.averageRating * 3)} min</span>
-                    <span className="book-card__rating">⭐ {book.averageRating}</span>
+                    <span className="book-card__time">⏱️ {book.totalRating || book.averageRating || '3'}-min</span>
+                    <span className="book-card__rating">⭐ {book.averageRating ? book.averageRating.toFixed(1) : 'N/A'}</span>
                   </div>
                 </div>
               </div>
@@ -187,8 +199,8 @@ function ForYouPage({ onBookClick, onPlayClick }) {
                   <h4 className="book-card__title">{book.title}</h4>
                   <p className="book-card__author">{book.author}</p>
                   <div className="book-card__footer">
-                    <span className="book-card__time">⏱️ {Math.floor(book.averageRating * 3)} min</span>
-                    <span className="book-card__rating">⭐ {book.averageRating}</span>
+                    <span className="book-card__time">⏱️ {book.totalRating || book.averageRating || '3'}-min</span>
+                    <span className="book-card__rating">⭐ {book.averageRating ? book.averageRating.toFixed(1) : 'N/A'}</span>
                   </div>
                 </div>
               </div>
