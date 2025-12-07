@@ -160,14 +160,22 @@ function BookPage({ bookId, onSaveBook, isBookSaved, onPlayClick }) {
                 </button>
                 <button 
                   className="btn book-btn book-btn--secondary"
-                  onClick={() => {
-                    console.log('Listen button clicked on BookPage for book:', bookId);
-                    if (onPlayClick) {
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Listen button clicked!');
+                    console.log('bookId:', bookId);
+                    console.log('book object:', book);
+                    console.log('onPlayClick exists?', !!onPlayClick);
+                    if (onPlayClick && bookId) {
+                      console.log('Calling onPlayClick with bookId:', bookId);
                       onPlayClick(bookId);
                     } else {
-                      console.error('onPlayClick is not defined');
+                      console.error('Missing required data:', { onPlayClick: !!onPlayClick, bookId });
+                      alert('Unable to play audio. Missing required data.');
                     }
                   }}
+                  style={{ cursor: 'pointer' }}
                 >
                   <BiMicrophone /> Listen
                 </button>
