@@ -160,22 +160,39 @@ function BookPage({ bookId, onSaveBook, isBookSaved, onPlayClick }) {
                 </button>
                 <button 
                   className="btn book-btn book-btn--secondary"
+                  type="button"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log('Listen button clicked!');
+                    console.log('========== LISTEN BUTTON CLICKED ==========');
                     console.log('bookId:', bookId);
                     console.log('book object:', book);
                     console.log('onPlayClick exists?', !!onPlayClick);
+                    console.log('onPlayClick function:', onPlayClick);
+                    
                     if (onPlayClick && bookId) {
-                      console.log('Calling onPlayClick with bookId:', bookId);
-                      onPlayClick(bookId);
+                      console.log('✅ Calling onPlayClick with bookId:', bookId);
+                      try {
+                        onPlayClick(bookId);
+                        console.log('✅ onPlayClick called successfully');
+                      } catch (error) {
+                        console.error('❌ Error calling onPlayClick:', error);
+                      }
                     } else {
-                      console.error('Missing required data:', { onPlayClick: !!onPlayClick, bookId });
-                      alert('Unable to play audio. Missing required data.');
+                      console.error('❌ Missing required data:', { 
+                        hasOnPlayClick: !!onPlayClick, 
+                        bookId: bookId 
+                      });
+                      alert('Unable to play audio. Check console for details.');
                     }
+                    console.log('========================================');
                   }}
-                  style={{ cursor: 'pointer' }}
+                  style={{ 
+                    cursor: 'pointer',
+                    pointerEvents: 'auto',
+                    zIndex: 10,
+                    position: 'relative'
+                  }}
                 >
                   <BiMicrophone /> Listen
                 </button>

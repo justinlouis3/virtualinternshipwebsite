@@ -111,6 +111,8 @@ body.dark-mode .book-meta {
 .book-btn--secondary {
   background-color: #032b41;
   color: #fff;
+  cursor: pointer;
+  pointer-events: auto;
 }
 
 .book-btn--secondary:hover {

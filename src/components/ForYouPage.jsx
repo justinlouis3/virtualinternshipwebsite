@@ -5,7 +5,7 @@ import './ForYouPage.css';
 function ForYouPage({ onBookClick, onPlayClick }) {
   const [loading, setLoading] = useState(true);
   const [selectedBook, setSelectedBook] = useState(null);
-  const [recommendedBooks, setRecommendBooks] = useState([]);
+  const [recommendedBooks, setRecommendedBooks] = useState([]);
   const [suggestedBooks, setSuggestedBooks] = useState([]);
   const [error, setError] = useState(null);
 
