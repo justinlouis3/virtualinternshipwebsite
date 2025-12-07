@@ -5,7 +5,7 @@ import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import Skeleton from './Skeleton';
 import './BookPage.css';
 
-function BookPage({ bookId, onSaveBook, isBookSaved }) {
+function BookPage({ bookId, onSaveBook, isBookSaved, onPlayClick }) {
   const [activeTab, setActiveTab] = useState('summary');
   const [loading, setLoading] = useState(true);
   const [book, setBook] = useState(null);
@@ -142,15 +142,15 @@ function BookPage({ bookId, onSaveBook, isBookSaved }) {
               <div className="book-header__meta">
                 <div className="book-meta">
                   <AiOutlineStar className="book-meta__icon" />
-                  <span>{book.averageRating} Rating</span>
+                  <span>{book.averageRating ? book.averageRating.toFixed(1) : 'N/A'} Rating</span>
                 </div>
                 <div className="book-meta">
                   <AiOutlineClockCircle className="book-meta__icon" />
-                  <span>{Math.floor(book.averageRating * 3)} min Read</span>
+                  <span>{book.audioLength ? Math.ceil(book.audioLength / 60) : '3'} min Read</span>
                 </div>
                 <div className="book-meta">
                   <BiMicrophone className="book-meta__icon" />
-                  <span>{book.totalRating} min Listen</span>
+                  <span>{book.audioLength ? Math.ceil(book.audioLength / 60) : '3'} min Listen</span>
                 </div>
               </div>
 
@@ -158,7 +158,17 @@ function BookPage({ bookId, onSaveBook, isBookSaved }) {
                 <button className="btn book-btn book-btn--primary">
                   <BiBook /> Read Now
                 </button>
-                <button className="btn book-btn book-btn--secondary">
+                <button 
+                  className="btn book-btn book-btn--secondary"
+                  onClick={() => {
+                    console.log('Listen button clicked on BookPage for book:', bookId);
+                    if (onPlayClick) {
+                      onPlayClick(bookId);
+                    } else {
+                      console.error('onPlayClick is not defined');
+                    }
+                  }}
+                >
                   <BiMicrophone /> Listen
                 </button>
                 <button 

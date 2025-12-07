@@ -268,7 +268,12 @@ function App() {
         ) : currentPage === 'search' ? (
           <SearchPage onBookClick={navigateToBook} />
         ) : currentPage.startsWith('book-') ? (
-          <BookPage bookId={currentPage.replace('book-', '')} onSaveBook={handleSaveBook} isBookSaved={isBookSaved} />
+          <BookPage 
+            bookId={currentPage.replace('book-', '')} 
+            onSaveBook={handleSaveBook} 
+            isBookSaved={isBookSaved}
+            onPlayClick={navigateToPlayer}
+          />
         ) : currentPage.startsWith('player-') ? (
           <PlayerPage bookId={currentPage.replace('player-', '')} />
         ) : null}
