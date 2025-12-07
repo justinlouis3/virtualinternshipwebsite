@@ -25,6 +25,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [savedBooks, setSavedBooks] = useState([]);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleSaveBook = (book) => {
     setSavedBooks(prev => {
@@ -113,9 +114,36 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const closeSidebar = () => {
+    setIsSidebarOpen(false);
+  };
+
   return (
     <div className="App">
-      {isLoggedIn && <Sidebar onLogout={handleLogout} onNavigateForYou={navigateToForYou} onNavigateSettings={navigateToSettings} onNavigateLibrary={navigateToLibrary} onNavigateHelp={navigateToHelp} onNavigateSearch={navigateToSearch} onLogoClick={handleLogoClick} />}
+      {isLoggedIn && (
+        <>
+          <button className="burger-menu" onClick={toggleSidebar}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <Sidebar 
+            isOpen={isSidebarOpen}
+            onClose={closeSidebar}
+            onLogout={handleLogout} 
+            onNavigateForYou={navigateToForYou} 
+            onNavigateSettings={navigateToSettings} 
+            onNavigateLibrary={navigateToLibrary} 
+            onNavigateHelp={navigateToHelp} 
+            onNavigateSearch={navigateToSearch} 
+            onLogoClick={handleLogoClick} 
+          />
+        </>
+      )}
       <div className={isLoggedIn ? "main-content main-content--with-sidebar" : "main-content"}>
         {currentPage === 'home' ? (
           <>
