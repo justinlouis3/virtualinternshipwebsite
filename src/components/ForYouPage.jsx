@@ -5,9 +5,16 @@ import './ForYouPage.css';
 function ForYouPage({ onBookClick, onPlayClick }) {
   const [loading, setLoading] = useState(true);
   const [selectedBook, setSelectedBook] = useState(null);
-  const [recommendedBooks, setRecommendedBooks] = useState([]);
+  const [recommendedBooks, setRecommendBooks] = useState([]);
   const [suggestedBooks, setSuggestedBooks] = useState([]);
   const [error, setError] = useState(null);
+
+  // Helper function to format reading time from seconds
+  const formatTime = (seconds) => {
+    if (!seconds || seconds === 0) return '3-min';
+    const minutes = Math.ceil(seconds / 60);
+    return `${minutes}-min`;
+  };
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -133,7 +140,7 @@ function ForYouPage({ onBookClick, onPlayClick }) {
                 <div className="selected-book__stats">
                   <div className="book-stat">
                     <div className="book-stat__icon">⏱️</div>
-                    <div className="book-stat__text">{selectedBook.totalRating || selectedBook.averageRating || '3-minute'} read</div>
+                    <div className="book-stat__text">{formatTime(selectedBook.audioLength || selectedBook.bookLength)} read</div>
                   </div>
                   <div className="book-stat">
                     <div className="book-stat__icon">⭐</div>
@@ -177,7 +184,7 @@ function ForYouPage({ onBookClick, onPlayClick }) {
                   <h4 className="book-card__title">{book.title}</h4>
                   <p className="book-card__author">{book.author}</p>
                   <div className="book-card__footer">
-                    <span className="book-card__time">⏱️ {book.totalRating || book.averageRating || '3'}-min</span>
+                    <span className="book-card__time">⏱️ {formatTime(book.audioLength || book.bookLength)}</span>
                     <span className="book-card__rating">⭐ {book.averageRating ? book.averageRating.toFixed(1) : 'N/A'}</span>
                   </div>
                 </div>
@@ -199,7 +206,7 @@ function ForYouPage({ onBookClick, onPlayClick }) {
                   <h4 className="book-card__title">{book.title}</h4>
                   <p className="book-card__author">{book.author}</p>
                   <div className="book-card__footer">
-                    <span className="book-card__time">⏱️ {book.totalRating || book.averageRating || '3'}-min</span>
+                    <span className="book-card__time">⏱️ {formatTime(book.audioLength || book.bookLength)}</span>
                     <span className="book-card__rating">⭐ {book.averageRating ? book.averageRating.toFixed(1) : 'N/A'}</span>
                   </div>
                 </div>
